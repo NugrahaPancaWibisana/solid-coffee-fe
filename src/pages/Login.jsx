@@ -1,7 +1,7 @@
 import logo from "../assets/images/login-img.svg";
 import cs from "../assets//images/coffe-shop.svg";
-import EyeClose from "../components/eye-icon/EyeClose";
-import EyeOpen from "../components/eye-icon/EyeOpen";
+import EyeClose from "../components/ui/EyeClose";
+import EyeOpen from "../components/ui/EyeOpen";
 import Mail from "../assets/images/mail.svg";
 import Password from "../assets/images/Password.svg";
 import { Link } from "react-router";
