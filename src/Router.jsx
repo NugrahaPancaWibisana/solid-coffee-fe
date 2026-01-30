@@ -6,10 +6,13 @@ import ProductLayout from "./components/layouts/ProductLayout";
 import Product from "./pages/Product";
 import Register from "./pages/Register";
 import { ForgotPassword } from "./pages/ForgotPassword";
+import ScrollToTop from "./components/ui/ScrollToTop";
 
 export default function Router() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
       </Route>
@@ -27,6 +30,7 @@ export default function Router() {
           </div>
         }
       />
-    </Routes>
+     </Routes>
+    </>
   );
 }
