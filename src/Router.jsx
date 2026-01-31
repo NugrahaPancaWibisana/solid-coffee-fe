@@ -11,7 +11,8 @@ import DashboardLayout from "./components/layouts/DashboardLayout";
 
 export default function Router() {
   return (
-    <Routes>
+    <>
+      <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />  
       </Route>
@@ -34,6 +35,7 @@ export default function Router() {
           </div>
         }
       />
-    </Routes>
+     </Routes>
+    </>
   );
 }
