@@ -7,32 +7,45 @@ import ProductIcon from "../../../assets/adminDashborad/ProductIcon.svg";
 import OrderIcon from "../../../assets/adminDashborad/Bag.svg";
 import UserIcon from "../../../assets/adminDashborad/UserIcon.svg";
 import LogoutIcon from "../../../assets/adminDashborad/LogoutIcon.svg";
+import { Link } from "react-router";
 
 function DashNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState();
+  const [activeMenu, setActiveMenu] = useState(1);
 
   const handleMenuClick = (id) => {
     setActiveMenu(activeMenu === id ? null : id);
   };
 
   const menu = [
-    { id: 1, name: "Dashboard", icon: DashboardIcon },
-    { id: 2, name: "Product", icon: ProductIcon },
-    { id: 3, name: "Order", icon: OrderIcon },
-    { id: 4, name: "User", icon: UserIcon },
-    { id: 5, name: "Keluar", icon: LogoutIcon },
+    { id: 1, name: "Dashboard", icon: DashboardIcon, path: "/dashboard/admin" },
+    {
+      id: 2,
+      name: "Product",
+      icon: ProductIcon,
+      path: "/dashboard/admin/product-list",
+    },
+    {
+      id: 3,
+      name: "Order",
+      icon: OrderIcon,
+      path: "/dashboard/admin/order-list",
+    },
+    { id: 4, name: "User", icon: UserIcon, path: "/dashboard/admin/user-list" },
+    { id: 5, name: "Keluar", icon: LogoutIcon, path: "/login" },
   ];
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full bg-white px-4 py-4 backdrop-blur-md sm:px-6 md:px-10 lg:px-16 xl:px-24">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-10">
-          <img
-            src={CoffeeIcon}
-            alt="Coffee Logo"
-            className="h-8 invert-0 md:h-10"
-          />
+          <Link to="/">
+            <img
+              src={CoffeeIcon}
+              alt="Coffee Logo"
+              className="h-8 invert-0 md:h-10"
+            />
+          </Link>
         </div>
 
         <div className="flex items-center justify-center gap-4 md:gap-5">
@@ -49,12 +62,16 @@ function DashNav() {
 
           {/* Desktop Auth Buttons */}
           <ul className="hidden items-center justify-center gap-6 md:flex">
-            <li className="border-brand-orange bg-brand-orange hover:text-brand-orange cursor-pointer rounded-[5px] border-2 px-6 py-2 text-center font-bold text-white transition-all hover:bg-transparent">
-              Sign In
-            </li>
-            <li className="border-brand-orange bg-brand-orange hover:text-brand-orange cursor-pointer rounded-[5px] border-2 px-6 py-2 text-center font-bold text-white transition-all hover:bg-transparent">
-              Sign Up
-            </li>
+            <Link to="/login">
+              <li className="border-brand-orange bg-brand-orange hover:text-brand-orange cursor-pointer rounded-[5px] border-2 px-6 py-2 text-center font-bold text-white transition-all hover:bg-transparent">
+                Sign In
+              </li>
+            </Link>
+            <Link to="/register">
+              <li className="border-brand-orange bg-brand-orange hover:text-brand-orange cursor-pointer rounded-[5px] border-2 px-6 py-2 text-center font-bold text-white transition-all hover:bg-transparent">
+                Sign Up
+              </li>
+            </Link>
           </ul>
 
           {/* Hamburger Menu Icon */}
@@ -99,7 +116,7 @@ function DashNav() {
 
       {/* Mobile Menu Sidebar */}
       <div
-        className={`fixed top-0 right-0 z-50 h-screen w-64 min-h-900 transform bg-black/90 backdrop-blur-xl transition-transform duration-300 ease-in-out md:hidden ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 right-0 z-50 h-screen min-h-900 w-64 transform bg-black/90 backdrop-blur-xl transition-transform duration-300 ease-in-out md:hidden ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex flex-col gap-8 p-8">
           <button
@@ -124,10 +141,10 @@ function DashNav() {
 
           <div className="mt-8 flex flex-col gap-4">
             <button className="border-brand-orange bg-brand-orange rounded-[5px] border-2 px-4 py-2 text-center font-bold text-[#0B0909] transition-all">
-              Sign In
+              <Link to="/login">Sign In</Link>
             </button>
             <button className="rounded-[5px] border-2 border-white bg-transparent px-4 py-2 text-center font-bold text-white transition-all hover:bg-white hover:text-black">
-              Sign Up
+              <Link to="/register">Sign Up</Link>
             </button>
           </div>
         </div>
@@ -136,14 +153,20 @@ function DashNav() {
             <button
               isActive={activeMenu === item.id}
               onClick={() => handleMenuClick(item.id)}
-              className={`${activeMenu == item.id ? "bg-brand-orange" : ""} text-white flex w-full pl-15 items-center gap-3 rounded-lg border-0 p-2`}
+              className={`cursor-pointer transition-all ${activeMenu == item.id ? "bg-brand-orange" : ""} flex w-full items-center gap-3 rounded-lg border-0 p-2 pl-15 text-white`}
             >
-              <div>
-                <img src={item.icon} alt={`${item.name}-icon`} className="brightness-500"/>
-              </div>
-              <div>
-                <p>{item.name}</p>
-              </div>
+              <Link to={item.path} className="flex gap-3">
+                <div>
+                  <img
+                    src={item.icon}
+                    alt={`${item.name}-icon`}
+                    className="brightness-500"
+                  />
+                </div>
+                <div>
+                  <p>{item.name}</p>
+                </div>
+              </Link>
             </button>
           ))}
         </div>
