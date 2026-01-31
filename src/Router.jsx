@@ -6,6 +6,8 @@ import ProductLayout from "./components/layouts/ProductLayout";
 import Product from "./pages/Product";
 import Register from "./pages/Register";
 import { ForgotPassword } from "./pages/ForgotPassword";
+import OrderLayout from "./components/layouts/OrderLayout";
+import DetailOrder from "./pages/DetailOrder";
 import AdminDashboard from "./pages/AdminDashboard";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 
@@ -23,6 +25,9 @@ export default function Router() {
         </Route>
       <Route path="product" element={<ProductLayout />}>
         <Route index element={<Product />} />
+      </Route>
+      <Route path="order" element={<OrderLayout />}>
+        <Route path="detail" element={<DetailOrder/>}/>
       </Route>
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
