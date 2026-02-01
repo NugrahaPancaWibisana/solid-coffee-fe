@@ -1,7 +1,7 @@
 import Star from "../assets/home/Star.png";
 import ArrowRight from "../assets/home/arrow-right.png";
 import FoodImage1 from "../assets/home/Food-1.png";
-import Chart from "../assets/home/ShoppingCart.svg";
+import Chart from "../assets/images/ShoppingCart.svg";
 import React from "react";
 import detail from "../assets/images/detail.svg"
 
@@ -258,7 +258,7 @@ export default function ProductDetail() {
                     <img
                       src={Chart}
                       alt="Cart"
-                      className="filter-brand-orange h-4 w-4 sm:h-6 sm:w-6"
+                      className="filter-brand-orange h-4 w-4 sm:h-6 sm:w-6 text-brand-orange"
                     />
                   </button>
                 </div>
