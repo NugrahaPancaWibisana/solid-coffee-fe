@@ -28,6 +28,7 @@ export default function Router() {
         </Route>
       <Route path="product" element={<ProductLayout />}>
         <Route index element={<Product />} />
+        <Route path="detail-product" element={<ProductDetail />} />
       </Route>
       <Route path="order" element={<OrderLayout />}>
         <Route path="detail" element={<DetailOrder/>}/>
