@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate, useLocation } from "react-router";
 
 import DashboardIcon from "../../assets/adminDashborad/DashboardIcon.svg";
 import ProductIcon from "../../assets/adminDashborad/ProductIcon.svg";
@@ -7,28 +8,31 @@ import UserIcon from "../../assets/adminDashborad/UserIcon.svg";
 import LogoutIcon from "../../assets/adminDashborad/LogoutIcon.svg";
 
 function AdminDashboardMenu() {
-  const [activeMenu, setActiveMenu] = useState();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleMenuClick = (id) => {
-    setActiveMenu(activeMenu === id ? null : id);
+  const handleMenuClick = (item) => {
+    if (item.path) {
+      navigate(item.path);
+    }
   };
 
   const menu = [
-    { id: 1, name: "Dashboard", icon: DashboardIcon },
-    { id: 2, name: "Product", icon: ProductIcon },
-    { id: 3, name: "Order", icon: OrderIcon },
-    { id: 4, name: "User", icon: UserIcon },
-    { id: 5, name: "Keluar", icon: LogoutIcon},
+    { id: 1, name: "Dashboard", icon: DashboardIcon, path: "/dashboard/admin" },
+    { id: 2, name: "Product", icon: ProductIcon, path: "" },
+    { id: 3, name: "Order", icon: OrderIcon, path: "" },
+    { id: 4, name: "User", icon: UserIcon, path: "/dashboard/admin/users-list" },
+    { id: 5, name: "Keluar", icon: LogoutIcon, path: "/login" },
   ];
   return (
-    <div className="hidden md:block md:p-5">
+    <div className="hidden md:block md:p-5 border-r-2 h-screen border-[#E8E8E8]">
       <div className="flex flex-col items-center justify-center">
         {menu.map((item) => (
           <button 
-            isActive={activeMenu === item.id}
-            onClick={() => handleMenuClick(item.id)}
-            className={`${activeMenu == item.id ? 'bg-brand-orange' : 'bg-white'} 
-            flex items-center gap-3 p-2 w-full border-0 rounded-lg`}
+            key={item.id}
+            onClick={() => handleMenuClick(item)}
+            className={`${location.pathname === item.path ? 'bg-brand-orange' : 'bg-white'} 
+            flex items-center gap-3 p-2 w-full border-0 rounded-lg cursor-pointer transition-colors hover:bg-[#ffad4e]`}
           >
             <div>
               <img src={item.icon} alt={`${item.name}-icon`} />

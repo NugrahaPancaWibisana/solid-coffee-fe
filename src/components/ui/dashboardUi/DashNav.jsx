@@ -7,6 +7,7 @@ import ProductIcon from "../../../assets/adminDashborad/ProductIcon.svg";
 import OrderIcon from "../../../assets/adminDashborad/Bag.svg";
 import UserIcon from "../../../assets/adminDashborad/UserIcon.svg";
 import LogoutIcon from "../../../assets/adminDashborad/LogoutIcon.svg";
+import { Link } from "react-router";
 
 function DashNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,14 +26,16 @@ function DashNav() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 z-50 w-full bg-white px-4 py-4 backdrop-blur-md sm:px-6 md:px-10 lg:px-16 xl:px-24">
+    <header className="top-0 left-0 z-50 w-full bg-white px-9 py-4 border-b-2 border-[#E8E8E8] backdrop-blur-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-10">
-          <img
-            src={CoffeeIcon}
-            alt="Coffee Logo"
-            className="h-8 invert-0 md:h-10"
-          />
+          <Link to="/">
+            <img
+              src={CoffeeIcon}
+              alt="Coffee Logo"
+              className="h-8 invert-0 md:h-10"
+            />
+          </Link>
         </div>
 
         <div className="flex items-center justify-center gap-4 md:gap-5">
@@ -48,14 +51,10 @@ function DashNav() {
           />
 
           {/* Desktop Auth Buttons */}
-          <ul className="hidden items-center justify-center gap-6 md:flex">
-            <li className="border-brand-orange bg-brand-orange hover:text-brand-orange cursor-pointer rounded-[5px] border-2 px-6 py-2 text-center font-bold text-white transition-all hover:bg-transparent">
-              Sign In
-            </li>
-            <li className="border-brand-orange bg-brand-orange hover:text-brand-orange cursor-pointer rounded-[5px] border-2 px-6 py-2 text-center font-bold text-white transition-all hover:bg-transparent">
-              Sign Up
-            </li>
-          </ul>
+          <div className="hidden md:flex gap-6 justify-center items-center">
+            <Link to="/login" className="text-white border-2 border-brand-orange rounded-[5px] py-1.5 px-6 text-center bg-brand-orange hover:bg-transparent hover:text-brand-orange cursor-pointer transition-all font-bold text-sm">Sign In</Link>
+            <Link to="/register" className="text-white border-2 border-brand-orange rounded-[5px] py-1.5 px-6 text-center bg-brand-orange hover:bg-transparent hover:text-brand-orange cursor-pointer transition-all font-bold text-sm">Sign Up</Link>
+          </div>
 
           {/* Hamburger Menu Icon */}
           <button
