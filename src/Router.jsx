@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import HistoryOrder from "./pages/HistoryOrder";
 import AdminUserlist from "./pages/AdminUserlist";
+import ProductDetail from "./pages/ProductDetail";
 
 export default function Router() {
   return (
