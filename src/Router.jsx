@@ -10,7 +10,8 @@ import OrderLayout from "./components/layouts/OrderLayout";
 import DetailOrder from "./pages/DetailOrder";
 import AdminDashboard from "./pages/AdminDashboard";
 import DashboardLayout from "./components/layouts/DashboardLayout";
-import HistoryOrder from "./pages/HIstoryOrder";
+import HistoryOrder from "./pages/HistoryOrder";
+import AdminUserlist from "./pages/AdminUserlist";
 import ProductDetail from "./pages/ProductDetail";
 
 export default function Router() {
@@ -23,6 +24,7 @@ export default function Router() {
       <Route path="dashboard" element={<DashboardLayout/>}>
           <Route path="admin">
             <Route index element={<AdminDashboard />} />
+            <Route path="users-list" element={<AdminUserlist/>} />
           </Route>
         </Route>
       <Route path="product" element={<ProductLayout />}>
