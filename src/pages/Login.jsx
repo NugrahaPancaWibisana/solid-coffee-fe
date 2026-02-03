@@ -16,6 +16,7 @@ export const Login = () => {
     email: "",
     password: "",
   });
+  const API_URL = import.meta.env.VITE_SOLID_API_URL;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,7 +28,10 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const API_URL = import.meta.env.VITE_SOLID_API_URL;
+    const payload = {
+      email: form.email,
+      password: form.password,
+    };
 
     try {
       const respon = await fetch(`${API_URL}/auth/`, {
@@ -35,7 +39,7 @@ export const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await respon.json();
@@ -48,7 +52,7 @@ export const Login = () => {
       localStorage.setItem("token", data.data.token);
 
       // baru simpan ke redux
-      dispatch(setLoginData(form));
+      dispatch(setLoginData({ email: form.email }));
 
       navigate("/");
     } catch (error) {
