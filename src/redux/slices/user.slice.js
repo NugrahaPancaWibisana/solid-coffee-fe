@@ -2,11 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchUsers = createAsyncThunk(
     "user/fetchUsers",
-    async (_, { rejectWithValue }) => {
+    async (page, { rejectWithValue }) => {
         try {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMTc1MDQzfQ.tnMJ5IB00SPwLleE84Fo-jP4bOLj_pycnR1HZKrypx4";
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMjI1MzgwfQ.RjzSLTUMi9vvW05FX2ZLWNs-3ujjej_UKJcmbo5XNLo";
+            const pageNum = page || 1;
 
-            const response = await fetch("http://192.168.50.221:8080/admin/user/", {
+            const response = await fetch(`${import.meta.env.VITE_SOLID_API_URL}/admin/user/?page=${pageNum}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -28,9 +29,9 @@ export const insertUser = createAsyncThunk(
     "user/insertUser",
     async (userData, { rejectWithValue }) => {
         try {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMTc1MDQzfQ.tnMJ5IB00SPwLleE84Fo-jP4bOLj_pycnR1HZKrypx4";
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMjI1MzgwfQ.RjzSLTUMi9vvW05FX2ZLWNs-3ujjej_UKJcmbo5XNLo";
 
-            const response = await fetch("http://192.168.50.221:8080/admin/user/", {
+            const response = await fetch(`${import.meta.env.VITE_SOLID_API_URL}/admin/user/`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -55,9 +56,9 @@ export const updateUser = createAsyncThunk(
     "user/updateUser",
     async ({ id, userData }, { rejectWithValue }) => {
         try {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMTc1MDQzfQ.tnMJ5IB00SPwLleE84Fo-jP4bOLj_pycnR1HZKrypx4";
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMjI1MzgwfQ.RjzSLTUMi9vvW05FX2ZLWNs-3ujjej_UKJcmbo5XNLo";
 
-            const response = await fetch(`http://192.168.50.221:8080/admin/user/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_SOLID_API_URL}/admin/user/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -82,9 +83,9 @@ export const deleteUser = createAsyncThunk(
     "user/deleteUser",
     async (id, { rejectWithValue }) => {
         try {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMTc1MDQzfQ.tnMJ5IB00SPwLleE84Fo-jP4bOLj_pycnR1HZKrypx4";
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInJvbGUiOiJhZG1pbiIsImlzcyI6IndpYmlzYW5hIiwiZXhwIjoxNzcwMjI1MzgwfQ.RjzSLTUMi9vvW05FX2ZLWNs-3ujjej_UKJcmbo5XNLo";
 
-            const response = await fetch(`http://192.168.50.221:8080/admin/user/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_SOLID_API_URL}/admin/user/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
