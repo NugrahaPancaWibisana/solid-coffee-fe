@@ -12,7 +12,7 @@ export default function Rating({ isOpen, onClose }) {
     <div className="fixed inset-0 z-70 flex items-end sm:items-center justify-center bg-black/50 p-0 sm:p-4 transition-opacity duration-300">
       <div className="animate-in fade-in slide-in-from-bottom-10 sm:slide-in-from-bottom-5 flex w-full max-w-md flex-col overflow-hidden rounded-t-[2.5rem] sm:rounded-3xl border-t sm:border border-gray-100 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] duration-300">
         <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-gray-200 sm:hidden"></div>
-        <div className="bg-brand-orange mt-3 sm:mt-0 h-1.5 w-full sm:h-6"></div>
+        <div className="bg-black mt-3 sm:mt-0 h-1.5 w-full sm:h-6"></div>
 
         <div className="flex flex-col border-b border-gray-50 p-6 sm:p-5">
             <div className="flex items-center justify-between gap-4">
