@@ -7,6 +7,8 @@ import Password from "../assets/images/Password.svg";
 import { Link, useNavigate } from "react-router";
 import React from "react";
 import MediaAuth from "../components/ui/MediaAuth";
+import { useDispatch } from "react-redux";
+import { setLoginData } from "../redux/slices/login.slice";
 
 export const Login = () => {
   const [openEye, setOpenEye] = React.useState(false);
@@ -16,6 +18,7 @@ export const Login = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleEye = () => {
     setOpenEye(!openEye);
@@ -24,27 +27,30 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const payload = {
-        email: form.email,
-        password: form.password,
-      };
+    const API_URL = import.meta.env.VITE_SOLID_API_URL;
 
-      const respon = await fetch("http://192.168.50.221:8080/auth/", {
+    try {
+      const respon = await fetch(`${API_URL}/auth/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(form),
       });
 
       const data = await respon.json();
-      localStorage.setItem("token", data.data.token);
+
       if (!respon.ok) {
         throw new Error(data.message || "Login failed");
       }
+
+      // simpan token
+      localStorage.setItem("token", data.data.token);
+
+      // baru simpan ke redux
+      dispatch(setLoginData(form));
+
       navigate("/");
-      console.log("LOGIN SUCCESS", data);
     } catch (error) {
       console.log(error.message);
     }
