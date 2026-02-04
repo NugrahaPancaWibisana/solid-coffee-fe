@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchUsers } from '../../redux/slices/user.slice'
 import PlusIcon from "../../assets/adminDashborad/Plus.svg"
 import Filter from "../../assets/adminDashborad/Filter.svg"
-import InserUser from "./InserUser"
+import InsertUser from "./InsertUser"
 import UpdateUser from './UpdateUser'
 import Pencil from "../../assets/adminDashborad/Pencil.svg"
 import Delete from "../../assets/adminDashborad/Delete.svg"
@@ -16,6 +16,7 @@ function UserListContent() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUpdateOpen, setIsUpdateOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null)
 
   const handleEditClick = (user) => {
@@ -28,9 +29,15 @@ function UserListContent() {
     setIsDeleteOpen(true)
   }
 
+  const handlePageChange = (page) => {
+    if (page > 0) {
+      setCurrentPage(page);
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchUsers())
-  }, [dispatch])
+    dispatch(fetchUsers(currentPage))
+  }, [dispatch, currentPage])
 
   return (
     <>
@@ -128,21 +135,36 @@ function UserListContent() {
 
             {/* Pagination */}
             <div className="flex justify-between items-center p-6 border-t border-[#E8E8E8] text-[#4F5665] text-sm">
-              <p>Show 5 user of 100 user</p>
+              <p>Showing page {currentPage} of users</p>
               <div className="flex items-center gap-6">
-                <button className="hover:text-black font-medium transition-colors cursor-pointer">Prev</button>
+                <button 
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="hover:text-black font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                  Prev
+                </button>
                 <div className="flex items-center gap-4 font-medium">
-                  <span className="text-brand-orange font-bold text-lg">1</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">2</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">3</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">4</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">5</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">6</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">7</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">8</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">9</span>
+                  {/* Dynamic page numbers could be improved if total pages are known */}
+                  <span className="text-brand-orange font-bold text-lg">{currentPage}</span>
+                  <span 
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="cursor-pointer hover:text-black transition-colors"
+                  >
+                    {currentPage + 1}
+                  </span>
+                  <span 
+                    onClick={() => handlePageChange(currentPage + 2)}
+                    className="cursor-pointer hover:text-black transition-colors"
+                  >
+                    {currentPage + 2}
+                  </span>
                 </div>
-                <button className="hover:text-black font-medium transition-colors cursor-pointer">Next</button>
+                <button 
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="hover:text-black font-medium transition-colors cursor-pointer"
+                >
+                    Next
+                </button>
               </div>
             </div>
           </div>
@@ -150,7 +172,7 @@ function UserListContent() {
       </section>
       
       {/* Insert User Modal */}
-      <InserUser isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <InsertUser isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <UpdateUser 
         key={selectedUser?.id}
         isOpen={isUpdateOpen} 
