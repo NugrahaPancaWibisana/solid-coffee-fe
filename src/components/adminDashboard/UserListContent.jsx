@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUsers } from '../../redux/slices/user.slice'
 import PlusIcon from "../../assets/adminDashborad/Plus.svg"
-import Filter from "../../assets/adminDashborad/Filter.svg"
-import InserUser from "./InserUser"
+import { Search } from "lucide-react";
+import FilterIcon from "../../assets/adminDashborad/FilterIcon.svg";
+import InsertUser from "./InsertUser"
 import UpdateUser from './UpdateUser'
 import Pencil from "../../assets/adminDashborad/Pencil.svg"
 import Delete from "../../assets/adminDashborad/Delete.svg"
@@ -16,7 +17,30 @@ function UserListContent() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUpdateOpen, setIsUpdateOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  
+  useEffect(() => {
+    // const params = new URLSearchParams(window.location.search);
+    // const searchParam = params.get("search") || "";
+    // const pageParam = parseInt(params.get("page")) || 1;
+    
+    // setSearchInput(searchParam);
+    // setSearchTerm(searchParam);
+    // setCurrentPage(pageParam);
+  }, []);
+
+  const updateUrlQueryParam = (key, value) => {
+    const url = new URL(window.location.href);
+    if (value) {
+      url.searchParams.set(key, value);
+    } else {
+      url.searchParams.delete(key);
+    }
+    window.history.pushState({ path: url.href }, "", url.href);
+  };
 
   const handleEditClick = (user) => {
     setSelectedUser(user)
@@ -28,9 +52,28 @@ function UserListContent() {
     setIsDeleteOpen(true)
   }
 
+  const handlePageChange = (page) => {
+    if (page > 0) {
+      setCurrentPage(page);
+      updateUrlQueryParam("page", page);
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchUsers())
-  }, [dispatch])
+    dispatch(fetchUsers({ page: currentPage }));
+  }, [dispatch, currentPage, searchTerm]);
+
+  const handleFilter = (e) => {
+    e.preventDefault();
+    setSearchTerm(searchInput);
+    setCurrentPage(1);
+    updateUrlQueryParam("search", searchInput);
+    updateUrlQueryParam("page", 1);
+  };
+  
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+  }
 
   return (
     <>
@@ -46,15 +89,38 @@ function UserListContent() {
             </button>
           </div>
 
-          <div className="flex items-end gap-5">
-            <div className="flex flex-col gap-1">
-              <label className="text-[#4F5665] text-sm font-medium">Search User</label>
-              <input type="text" placeholder='Enter User Name' className="border border-[#E8E8E8] rounded-md px-4 py-2 w-64 focus:outline-none focus:border-brand-orange transition-colors" />
+            <div className="w-full md:w-auto">
+               <div>
+                <p className="mt-1 text-sm text-gray-500">Search User</p>
+              </div>
+              <form onSubmit={handleFilter} className="flex gap-3">
+                <div className="flex justify-between rounded border px-3 py-2 bg-white">
+                  <input
+                    type="text"
+                    placeholder="Enter User Name or Email"
+                    className="w-48 md:w-64 focus:outline-none"
+                    value={searchInput}
+                    onChange={handleSearchChange}
+                  />
+                  <div className="flex items-center pl-3">
+                    <Search size={20} className="text-gray-400" />
+                  </div>
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    className="bg-brand-orange flex h-full items-center justify-center gap-1 rounded-lg border-0 p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer hover:bg-[#ffad4e]"
+                  >
+                    <div className="w-5">
+                      <img src={FilterIcon} alt="filter-icon" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-black">Filter</p>
+                    </div>
+                  </button>
+                </div>
+              </form>
             </div>
-            <button className="bg-brand-orange text-black flex gap-2 items-center px-4 py-2 rounded-md shadow-sm hover:shadow-md transition-shadow h-10.5 cursor-pointer hover:bg-[#ffad4e]">
-              <img src={Filter} alt="Icon Filter" className="w-4 h-4" /> Filter
-            </button>
-          </div>
         </div>
 
         {/* Table */}
@@ -99,7 +165,7 @@ function UserListContent() {
                       </td>
                       <td className="p-3">
                         <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-200">
-                          <img src={user.photo || UserIcon} alt={user.fullname} className="w-full h-full object-cover" />
+                          <img src={user.photo ? `http://192.168.50.221:8080/static/img/${user.photo}` : UserIcon} alt={user.fullname} className="w-full h-full object-cover" />
                         </div>
                       </td>
                       <td className="p-3 font-medium text-black whitespace-nowrap">{user.fullname}</td>
@@ -128,21 +194,36 @@ function UserListContent() {
 
             {/* Pagination */}
             <div className="flex justify-between items-center p-6 border-t border-[#E8E8E8] text-[#4F5665] text-sm">
-              <p>Show 5 user of 100 user</p>
+              <p>Showing page {currentPage} of users</p>
               <div className="flex items-center gap-6">
-                <button className="hover:text-black font-medium transition-colors cursor-pointer">Prev</button>
+                <button 
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="hover:text-black font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                  Prev
+                </button>
                 <div className="flex items-center gap-4 font-medium">
-                  <span className="text-brand-orange font-bold text-lg">1</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">2</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">3</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">4</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">5</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">6</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">7</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">8</span>
-                  <span className="cursor-pointer hover:text-black transition-colors">9</span>
+                  {/* Dynamic page numbers could be improved if total pages are known */}
+                  <span className="text-brand-orange font-bold text-lg">{currentPage}</span>
+                  <span 
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="cursor-pointer hover:text-black transition-colors"
+                  >
+                    {currentPage + 1}
+                  </span>
+                  <span 
+                    onClick={() => handlePageChange(currentPage + 2)}
+                    className="cursor-pointer hover:text-black transition-colors"
+                  >
+                    {currentPage + 2}
+                  </span>
                 </div>
-                <button className="hover:text-black font-medium transition-colors cursor-pointer">Next</button>
+                <button 
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="hover:text-black font-medium transition-colors cursor-pointer"
+                >
+                    Next
+                </button>
               </div>
             </div>
           </div>
@@ -150,7 +231,7 @@ function UserListContent() {
       </section>
       
       {/* Insert User Modal */}
-      <InserUser isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <InsertUser isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <UpdateUser 
         key={selectedUser?.id}
         isOpen={isUpdateOpen} 
