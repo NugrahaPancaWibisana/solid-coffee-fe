@@ -4,15 +4,16 @@ import FoodImage1 from "../assets/home/Food-1.png";
 import Chart from "../assets/images/ShoppingCart.svg";
 import React from "react";
 import detail from "../assets/images/detail.svg";
-import { useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 
 export default function ProductDetail() {
-  const [counter, setCounter] = React.useState(0);
+  const [counter, setCounter] = React.useState(1);
   const [unClick, setUnClick] = React.useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [detailData, setDetailData] = React.useState({});
 
   // const search = searchParams.get("search") || "";
-// 
+  //
   const { id } = useParams();
 
   const API_URL = import.meta.env.VITE_SOLID_API_URL;
@@ -48,7 +49,7 @@ export default function ProductDetail() {
     (async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await fetch(`${API_URL}/admin/products/${id}`, {
+        const res = await fetch(`${API_URL}/products/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +61,8 @@ export default function ProductDetail() {
         }
 
         const data = await res.json();
-        console.log(data);
+        console.log("test:", data);
+        setDetailData(data.data);
       } catch (err) {
         console.error(err.message);
       }
@@ -88,14 +90,19 @@ export default function ProductDetail() {
     handleInput(variant);
     updateParams("variant", variant);
   };
+  //
+  const navigate = useNavigate();
+  const handleBuy = () => {
+    navigate("/product/checkout-product");
+  };
 
   return (
-    <section className="mt-10 px-4 lg:mt-20 lg:px-16">
+    <section className="mt-10 px-4 lg:mt-20 lg:px-24">
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
         {/* LEFT - IMAGES */}
         <section className="flex flex-col gap-5">
           <img
-            src={detail}
+            src={detailData.images}
             alt="detail-coffe"
             className="w-full rounded-lg object-cover"
           />
@@ -104,7 +111,7 @@ export default function ProductDetail() {
             {[detail, detail, detail].map((img, i) => (
               <img
                 key={i}
-                src={img}
+                src={detailData.images}
                 alt="detail-coffe"
                 className="aspect-square w-full rounded-md object-cover"
               />
@@ -119,14 +126,16 @@ export default function ProductDetail() {
           </p>
 
           <p className="py-5 text-3xl font-medium lg:text-6xl">
-            Hazelnut Latte
+            {detailData.product_name}
           </p>
 
           <div className="flex items-center gap-3 lg:gap-4">
             <p className="text-sm text-[#D00000] line-through lg:text-base">
-              IDR 20.000
+              IDR.{detailData.price}
             </p>
-            <p className="text-brand-orange text-xl lg:text-2xl">IDR 10.000</p>
+            <p className="text-brand-orange text-xl lg:text-2xl">
+              IDR.{detailData.price - (detailData.price * 10) / 100}
+            </p>
           </div>
 
           {/* Rating */}
@@ -134,14 +143,21 @@ export default function ProductDetail() {
             {[1, 2, 3, 4, 5].map((item) => (
               <img key={item} src={Star} alt="star" className="w-4 lg:w-5" />
             ))}
-            <span className="ml-2 text-sm lg:text-base">5.0</span>
+            <span className="ml-2 text-sm lg:text-base">
+              {parseFloat(detailData.rating).toFixed(1)}
+            </span>
           </div>
 
           {/* Review */}
           <div className="flex items-center gap-3 text-sm text-gray-500 lg:text-base">
-            <span>200+ Review</span>
-            <span>|</span>
-            <span>Recommendation</span>
+            <span>{detailData.total_review} Review</span>
+
+            {detailData.total_review >= 3 && (
+              <>
+                <span>|</span>
+                <span>Recommendation</span>
+              </>
+            )}
           </div>
           <div>
             <p className="text-sm lg:text-base">
@@ -250,7 +266,10 @@ export default function ProductDetail() {
               </div>
             </div>
             <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
-              <button className="bg-brand-orange rounded-md py-4 text-sm font-semibold text-white lg:text-base">
+              <button
+                onClick={handleBuy}
+                className="bg-brand-orange rounded-md py-4 text-sm font-semibold text-white hover:bg-orange-500 lg:text-base"
+              >
                 Buy
               </button>
               <button className="border-brand-orange text-brand-orange flex items-center justify-center gap-2 rounded-md border py-4 text-sm font-semibold lg:text-base">
