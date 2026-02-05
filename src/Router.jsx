@@ -16,13 +16,16 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserlist from "./pages/AdminUserlist";
+import AdminProductList from "./pages/AdminProductList";
+import AdminOrderList from "./pages/AdminOrderList";
+
 import PrivateRoute from "./components/routes/PrivateRoute";
 import AdminRoute from "./components/routes/AdminRoute";
 
 export default function Router() {
   return (
     <Routes>
-      {/* PUBLIC pakai MainLayout */}
+      {/* PUBLIC */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="product" element={<Product />} />
@@ -43,6 +46,8 @@ export default function Router() {
       <Route element={<AdminRoute />}>
         <Route path="dashboard" element={<DashboardLayout />}>
           <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/product-list" element={<AdminProductList />} />
+          <Route path="admin/order-list" element={<AdminOrderList />} />
           <Route path="admin/users-list" element={<AdminUserlist />} />
         </Route>
       </Route>
