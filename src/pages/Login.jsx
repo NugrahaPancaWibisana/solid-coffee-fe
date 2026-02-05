@@ -27,46 +27,17 @@ export const Login = () => {
     setOpenEye(!openEye);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     setErrMessage("");
 
     if (!form.email.trim() || !form.password.trim()) {
       setErrMessage("Email and password can't be empty");
       return;
     }
+    navigate("/");
 
-    try {
-      const respon = await fetch(`${API_URL}/auth/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const data = await respon.json();
-
-      if (!respon.ok) {
-        // lempar status biar bisa dibaca di catch
-        throw { status: respon.status, message: data.message };
-      }
-
-      dispatch(loginThunk(data));
-
-      navigate("/");
-    } catch (error) {
-      if (error.status === 401) {
-        setErrMessage("Wrong Email or Password");
-      } else if (error.status === 404) {
-        setErrMessage("User not Found");
-      } else if (error.status === 500) {
-        setErrMessage("Server is in trouble, try later");
-      } else {
-        setErrMessage("Something went wrong, try again");
-      }
-    }
+    dispatch(loginThunk(form));
   };
 
   return (
