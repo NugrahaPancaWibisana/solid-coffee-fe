@@ -16,36 +16,43 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserlist from "./pages/AdminUserlist";
+import PrivateRoute from "./components/routes/PrivateRoute";
+import AdminRoute from "./components/routes/AdminRoute";
 
 export default function Router() {
   return (
     <Routes>
-
-      {/*Semua halaman user pakai 1 layout */}
+      {/* PUBLIC pakai MainLayout */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
-
         <Route path="product" element={<Product />} />
         <Route path="product/:id" element={<ProductDetail />} />
-        <Route path="checkout-product" element={<CheckoutProduct />} />
-
-        <Route path="order/detail" element={<DetailOrder />} />
-        <Route path="order/history" element={<HistoryOrder />} />
-
-        <Route path="profile" element={<Profile />} />
       </Route>
 
-      {/* Dashboard admin layout terpisah */}
-      <Route path="dashboard" element={<DashboardLayout />}>
-        <Route path="admin" element={<AdminDashboard />} />
-        <Route path="admin/users-list" element={<AdminUserlist />} />
+      {/* PRIVATE USER */}
+      <Route element={<PrivateRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path="checkout-product" element={<CheckoutProduct />} />
+          <Route path="order/detail" element={<DetailOrder />} />
+          <Route path="order/history" element={<HistoryOrder />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
       </Route>
 
-      {/* Auth tanpa navbar */}
+      {/* ADMIN */}
+      <Route element={<AdminRoute />}>
+        <Route path="dashboard" element={<DashboardLayout />}>
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/users-list" element={<AdminUserlist />} />
+        </Route>
+      </Route>
+
+      {/* AUTH */}
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="forgot-password" element={<ForgotPassword />} />
 
+      {/* 404 */}
       <Route
         path="*"
         element={
