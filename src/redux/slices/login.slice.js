@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+function decodeJwt(token) {
+  return JSON.parse(atob(token.split(".")[1]));
+}
+
 export const loginThunk = createAsyncThunk(
   "auth/login",
   async (payload, { rejectWithValue }) => {
@@ -15,20 +19,24 @@ export const loginThunk = createAsyncThunk(
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         throw new Error(data.message);
       }
 
-      // simpan token
-      localStorage.setItem("token", data.data.token);
+      const token = data.data.token;
 
-      return data.data;
+      const decoded = decodeJwt(token);
+
+      return {
+        token,
+        role: decoded.role,
+      };
     } catch (err) {
       return rejectWithValue(err.message);
     }
-  },
+  }
 );
+
 
 const initialState = {
   user: null,
@@ -67,6 +75,7 @@ const loginSlice = createSlice({
         prevState.user = {
           email: action.meta.arg.email, // dari form login
           token: action.payload.token,
+          role: action.payload.role,
         };
         // console.log("PAYLOAD LOGIN:", payload);
       },
