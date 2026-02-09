@@ -24,6 +24,7 @@ import Admin from "./pages/Admin";
 import ProductLayout from "./components/layouts/ProductLayout";
 import OrderLayout from "./components/layouts/OrderLayout";
 import ProfileLayout from "./components/layouts/ProfileLayout";
+import NotFound from "./components/ui/NotFound";
 
 export default function Router() {
   return (
@@ -58,7 +59,7 @@ export default function Router() {
       {/* ORDER (PRIVATE) */}
       <Route element={<PrivateRoute />}>
         <Route path="order" element={<OrderLayout />}>
-          <Route path="detail" element={<DetailOrder />} />
+          <Route path="detail/:id" element={<DetailOrder />} />
           <Route path="history" element={<HistoryOrder />} />
         </Route>
       </Route>
@@ -78,11 +79,7 @@ export default function Router() {
       {/* 404 */}
       <Route
         path="*"
-        element={
-          <div className="flex h-dvh items-center justify-center text-5xl font-bold">
-            404 NOT FOUND
-          </div>
-        }
+        element={<NotFound/>}
       />
     </Routes>
   );
