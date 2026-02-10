@@ -3,8 +3,8 @@ import ArrowRight from "../assets/home/arrow-right.png";
 import FoodImage1 from "../assets/home/Food-1.png";
 import Chart from "../assets/images/ShoppingCart.svg";
 import React from "react";
-import detail from "../assets/images/detail.svg";
 import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function ProductDetail() {
   const [counter, setCounter] = React.useState(1);
@@ -45,9 +45,11 @@ export default function ProductDetail() {
     });
   };
   //
+
+  const token = useSelector((state) => state.login.token);
+  // console.log(token)
   React.useEffect(() => {
     (async () => {
-      const token = localStorage.getItem("token");
       try {
         const res = await fetch(`${API_URL}/products/${id}`, {
           method: "GET",
@@ -61,13 +63,13 @@ export default function ProductDetail() {
         }
 
         const data = await res.json();
-        console.log("test:", data);
+        console.log("testinggg:", data);
         setDetailData(data.data);
       } catch (err) {
         console.error(err.message);
       }
     })();
-  }, [API_URL, id]);
+  }, [API_URL, id, token]);
   //
   const updateParams = (key, value) => {
     const params = new URLSearchParams(searchParams);
@@ -96,26 +98,38 @@ export default function ProductDetail() {
     navigate("/product/checkout-product");
   };
 
+  const dtImgs = detailData?.images;
+
+  const images = !dtImgs
+    ? []
+    : dtImgs.includes(",")
+      ? dtImgs.split(",")
+      : [dtImgs];
+
+  console.log("example", images);
+
   return (
     <section className="mt-10 px-4 lg:mt-20 lg:px-24">
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
         {/* LEFT - IMAGES */}
         <section className="flex flex-col gap-5">
           <img
-            src={detailData.images}
+            src={`${API_URL}/static/img/products/${images}`}
             alt="detail-coffe"
             className="w-full rounded-lg object-cover"
           />
 
           <div className="grid grid-cols-3 gap-3 lg:gap-6">
-            {[detail, detail, detail].map((img, i) => (
-              <img
-                key={i}
-                src={detailData.images}
-                alt="detail-coffe"
-                className="aspect-square w-full rounded-md object-cover"
-              />
-            ))}
+            {[1, 2, 3].map((_, ri) =>
+              images.map((img, i) => (
+                <img
+                  key={`${ri}-${i}`}
+                  src={`${API_URL}/static/img/products/${img}`}
+                  alt="detail-coffe"
+                  className="aspect-square w-full rounded-md object-center"
+                />
+              )),
+            )}
           </div>
         </section>
 
