@@ -121,11 +121,7 @@ export const updateOrder = createAsyncThunk(
 
 export const deleteOrder = createAsyncThunk(
     "order/deleteorder",
-<<<<<<< HEAD
-    async (id, { getState,rejectWithValue }) => {
-=======
     async (id, { getState, rejectWithValue }) => {
->>>>>>> master
         try {
             const token = getState().login.user?.token || "";
 
