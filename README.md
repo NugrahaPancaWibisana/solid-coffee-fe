@@ -5,6 +5,7 @@ A web application solid coffee shop, built with React JS and following clean arc
 ## Description
 
 This web application was built to handle the online coffee buying and selling business between coffee shops and buyers/users.
+<<<<<<< HEAD
 
 ## Tech Stack
 
@@ -18,6 +19,8 @@ This web application was built to handle the online coffee buying and selling bu
 - **Authentication**: Register, Login, Logout
 - **User**: Get Product By filter and Detail, Buy product / Create an Order, Create Profile and have Order History
 - **Admin**: Sales Dashboard, CRUD for Product, Order, User
+=======
+>>>>>>> 066e331 (add description on readme)
 
 ## Getting Started
 
