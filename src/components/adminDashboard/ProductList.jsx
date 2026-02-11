@@ -95,8 +95,6 @@ function ProductList() {
     setIsEditbarOpen(true);
   };
 
-  console.log(products);
-
   return (
     <div>
       {selectProduct ? (

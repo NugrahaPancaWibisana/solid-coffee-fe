@@ -72,7 +72,6 @@ function MenuList() {
     setIsEditbarOpen(true);
   };
 
-  console.log(isLoading);
   let no = 1;
 
   return (

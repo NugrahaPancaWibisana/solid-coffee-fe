@@ -14,8 +14,6 @@ export const fetchOrders = createAsyncThunk(
                 },
             });
 
-            console.log(params.toString())
-
             if (!response.ok) {
                 throw new Error("Failed Get Data Order");
             }

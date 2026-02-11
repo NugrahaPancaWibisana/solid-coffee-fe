@@ -50,8 +50,6 @@ function AddProducts({ isAddbarOpen, toggleAddbar }) {
     try {
       dispatch(insertProduct(formData));
 
-      console.log("New Product:", newProduct);
-
       setNewProduct({
         product_name: "",
         price: "",

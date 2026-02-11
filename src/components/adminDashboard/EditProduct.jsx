@@ -44,7 +44,6 @@ function EditProduct({ isEditbarOpen, toggleEditbar, selectProduct }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Edit Product:", editProduct);
 
     setEditProduct({
       name: "",

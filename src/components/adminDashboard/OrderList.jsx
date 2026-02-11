@@ -412,7 +412,6 @@ function OrderList() {
 
   const isSidebarOpen = activeSidebar !== null;
 
-  console.log(filter)
   return (
     <div>
       {/* Order Edit Sidebar */}

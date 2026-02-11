@@ -50,8 +50,6 @@ function AddMenu({ isAddbarOpen, toggleAddbar }) {
     try {
       dispatch(insertMenu(formData));
 
-      console.log("New Menu:", newMenu);
-
       setNewMenu({
         menu_name: "",
         price: "",
