@@ -8,7 +8,7 @@ export const loginThunk = createAsyncThunk(
     try {
       const API_URL = import.meta.env.VITE_SOLID_API_URL;
 
-      const res = await fetch(`${API_URL}/auth/`, {
+      const res = await fetch(`${API_URL}/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
