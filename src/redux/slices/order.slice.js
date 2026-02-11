@@ -60,7 +60,7 @@ export const insertOrder = createAsyncThunk(
         try {
             const token = getState().login.user?.token || "";
 
-            const response = await fetch(`${import.meta.env.VITE_SOLID_API_URL}/admin/orders/`, {
+            const response = await fetch(`${import.meta.env.VITE_SOLID_API_URL}/admin/orders`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`
