@@ -11,9 +11,7 @@ export default function ProductDetail() {
   const [unClick, setUnClick] = React.useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [detailData, setDetailData] = React.useState({});
-
-  // const search = searchParams.get("search") || "";
-  //
+  // const [page, setPage] = React.useState(1);
   const { id } = useParams();
 
   const API_URL = import.meta.env.VITE_SOLID_API_URL;
@@ -29,20 +27,16 @@ export default function ProductDetail() {
     if (counter <= 0) {
       return;
     }
-    setCounter((counter) => {
-      return counter - 1;
+    setCounter((prev) => {
+      if (prev <= 1) return prev;
+      const newValue = prev - 1;
+      updateParams("qty", newValue);
+      return newValue;
     });
-    updateParams("qty", counter - 1);
   };
   //
   const handleInput = (value) => {
-    setUnClick((prev) => {
-      if (prev === value) {
-        return null;
-      } else if (prev !== value) {
-        return value;
-      }
-    });
+    setUnClick((prev) => (prev === value ? null : value));
   };
   //
 
@@ -63,7 +57,7 @@ export default function ProductDetail() {
         }
 
         const data = await res.json();
-        console.log("testinggg:", data);
+        // console.log("testinggg:", data);
         setDetailData(data.data);
       } catch (err) {
         console.error(err.message);
@@ -95,18 +89,17 @@ export default function ProductDetail() {
   //
   const navigate = useNavigate();
   const handleBuy = () => {
-    navigate("/product/checkout-product");
+  navigate(
+  `/product/checkout-product?id=${id}&qty=${counter}&size=${searchParams.get("size")}&variant=${searchParams.get("variant")}`
+);
   };
 
-  const dtImgs = detailData?.images;
+  const dtImgs = detailData.images;
+  const images = dtImgs ? dtImgs.split(",") : [];
 
-  const images = !dtImgs
-    ? []
-    : dtImgs.includes(",")
-      ? dtImgs.split(",")
-      : [dtImgs];
+  // console.log("example", images);
 
-  console.log("example", images);
+  // console.log(detailData);
 
   return (
     <section className="mt-10 px-4 lg:mt-20 lg:px-24">
@@ -114,7 +107,7 @@ export default function ProductDetail() {
         {/* LEFT - IMAGES */}
         <section className="flex flex-col gap-5">
           <img
-            src={`${API_URL}/static/img/products/${images}`}
+            src={`${API_URL}/static/img/products/${images[0]}`}
             alt="detail-coffe"
             className="w-full rounded-lg object-cover"
           />
@@ -124,7 +117,7 @@ export default function ProductDetail() {
               images.map((img, i) => (
                 <img
                   key={`${ri}-${i}`}
-                  src={`${API_URL}/static/img/products/${img}`}
+                  src={`${API_URL}/static/img/products/${images[0]}`}
                   alt="detail-coffe"
                   className="aspect-square w-full rounded-md object-center"
                 />
