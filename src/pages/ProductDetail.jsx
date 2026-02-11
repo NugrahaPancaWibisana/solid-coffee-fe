@@ -3,17 +3,15 @@ import ArrowRight from "../assets/home/arrow-right.png";
 import FoodImage1 from "../assets/home/Food-1.png";
 import Chart from "../assets/images/ShoppingCart.svg";
 import React from "react";
-import detail from "../assets/images/detail.svg";
 import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function ProductDetail() {
   const [counter, setCounter] = React.useState(1);
   const [unClick, setUnClick] = React.useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [detailData, setDetailData] = React.useState({});
-
-  // const search = searchParams.get("search") || "";
-  //
+  // const [page, setPage] = React.useState(1);
   const { id } = useParams();
 
   const API_URL = import.meta.env.VITE_SOLID_API_URL;
@@ -29,25 +27,23 @@ export default function ProductDetail() {
     if (counter <= 0) {
       return;
     }
-    setCounter((counter) => {
-      return counter - 1;
+    setCounter((prev) => {
+      if (prev <= 1) return prev;
+      const newValue = prev - 1;
+      updateParams("qty", newValue);
+      return newValue;
     });
-    updateParams("qty", counter - 1);
   };
   //
   const handleInput = (value) => {
-    setUnClick((prev) => {
-      if (prev === value) {
-        return null;
-      } else if (prev !== value) {
-        return value;
-      }
-    });
+    setUnClick((prev) => (prev === value ? null : value));
   };
   //
+
+  const token = useSelector((state) => state.login.token);
+  // console.log(token)
   React.useEffect(() => {
     (async () => {
-      const token = localStorage.getItem("token");
       try {
         const res = await fetch(`${API_URL}/products/${id}`, {
           method: "GET",
@@ -61,13 +57,13 @@ export default function ProductDetail() {
         }
 
         const data = await res.json();
-        console.log("test:", data);
+        // console.log("testinggg:", data);
         setDetailData(data.data);
       } catch (err) {
         console.error(err.message);
       }
     })();
-  }, [API_URL, id]);
+  }, [API_URL, id, token]);
   //
   const updateParams = (key, value) => {
     const params = new URLSearchParams(searchParams);
@@ -93,8 +89,17 @@ export default function ProductDetail() {
   //
   const navigate = useNavigate();
   const handleBuy = () => {
-    navigate("/product/checkout-product");
+  navigate(
+  `/product/checkout-product?id=${id}&qty=${counter}&size=${searchParams.get("size")}&variant=${searchParams.get("variant")}`
+);
   };
+
+  const dtImgs = detailData.images;
+  const images = dtImgs ? dtImgs.split(",") : [];
+
+  // console.log("example", images);
+
+  // console.log(detailData);
 
   return (
     <section className="mt-10 px-4 lg:mt-20 lg:px-24">
@@ -102,34 +107,21 @@ export default function ProductDetail() {
         {/* LEFT - IMAGES */}
         <section className="flex flex-col gap-5">
           <img
-            src={
-              Array.isArray(detailData.images) 
-                ? detailData.images[0] 
-                : (typeof detailData.images === 'string' ? detailData.images.split(',')[0] : detailData.images)
-            }
+            src={`${API_URL}/static/img/products/${images[0]}`}
             alt="detail-coffe"
             className="w-full rounded-lg object-cover"
           />
 
           <div className="grid grid-cols-3 gap-3 lg:gap-6">
-            {(Array.isArray(detailData.images) || typeof detailData.images === 'string') ? (
-              (Array.isArray(detailData.images) ? detailData.images : detailData.images.split(',')).map((img, i) => (
+            {[1, 2, 3].map((_, ri) =>
+              images.map((img, i) => (
                 <img
-                  key={i}
-                  src={img}
-                  alt={`detail-coffee-${i}`}
-                  className="aspect-square w-full rounded-md object-cover"
-                />
-              ))
-            ) : (
-              [detail, detail, detail].map((img, i) => (
-                <img
-                  key={i}
-                  src={detailData.images || img}
+                  key={`${ri}-${i}`}
+                  src={`${API_URL}/static/img/products/${images[0]}`}
                   alt="detail-coffe"
-                  className="aspect-square w-full rounded-md object-cover"
+                  className="aspect-square w-full rounded-md object-center"
                 />
-              ))
+              )),
             )}
           </div>
         </section>
